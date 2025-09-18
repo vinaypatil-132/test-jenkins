@@ -43,7 +43,7 @@ pipeline {
               "docker pull ${env.IMG_TAG} && \
                docker stop sample-app || true && \
                docker rm sample-app || true && \
-               docker run -d --name sample-app -p 8080:8080 ${env.IMG_TAG}"
+               docker run -d --name sample-app -p 8081:8080 ${env.IMG_TAG}"
           """
         }
       }
