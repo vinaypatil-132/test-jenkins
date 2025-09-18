@@ -35,21 +35,18 @@ pipeline {
       }
     }
 
-    stage('Deploy (SSH)') {
-      steps {
-        sshagent(['deploy-ssh']) {
-          // replace deploy@TARGET_SERVER with real user@host
-          sh """
-            ssh -o StrictHostKeyChecking=no deploy@TARGET_SERVER \
-              "docker pull ${env.IMG_TAG} && \
-               docker stop sample-app || true && \
-               docker rm sample-app || true && \
-               docker run -d --name sample-app -p 80:80 ${env.IMG_TAG}"
-          """
+stage('Deploy (SSH)') {
+    steps {
+        sshagent(['ssh-credentials']) {
+            sh '''
+                ssh -o StrictHostKeyChecking=no projects@localhost "docker pull vinu890/sample-app:${GIT_COMMIT}"
+                ssh -o StrictHostKeyChecking=no projects@localhost "docker stop sample-app || true && docker rm sample-app || true"
+                ssh -o StrictHostKeyChecking=no projects@localhost "docker run -d --name sample-app -p 8080:8080 vinu890/sample-app:${GIT_COMMIT}"
+            '''
         }
-      }
     }
-  }
+}
+
 
   post {
     always {
