@@ -36,19 +36,19 @@ pipeline {
     }
 
     stage('Deploy (SSH)') {
-        steps {
-            sshagent(['deploy-ssh']) {
-            sh """
+      steps {
+        sshagent(['deploy-ssh']) {
+          sh """
             ssh -o StrictHostKeyChecking=no projects@localhost \
-            "docker pull ${env.IMG_TAG} && \
-            docker stop sample-app || true && \
-            docker rm sample-app || true && \
-            docker run -d --name sample-app -p 8080:8080 ${env.IMG_TAG}"
-      """
+              "docker pull ${env.IMG_TAG} && \
+               docker stop sample-app || true && \
+               docker rm sample-app || true && \
+               docker run -d --name sample-app -p 8080:8080 ${env.IMG_TAG}"
+          """
+        }
+      }
     }
   }
-}
-
 
   post {
     always {
