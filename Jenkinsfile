@@ -37,7 +37,7 @@ pipeline {
 
 stage('Deploy (SSH)') {
   steps {
-    sshagent(['projects']) {
+    sshagent(['deploy-ssh']) {
       sh """
         ssh -o StrictHostKeyChecking=no projects@localhost \
           "docker pull ${env.IMG_TAG} && \
